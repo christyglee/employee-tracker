@@ -35,7 +35,7 @@ connection.connect((err) => {
         choices: [
           "View All Employees",
           "View All Employees By Department",
-          "View All Employees By Role",
+          "View All Employee Roles",
           "Add Employee",
           "Add Role",
           "Add Department",
@@ -54,8 +54,8 @@ connection.connect((err) => {
             viewByDepartment();
           break;
 
-          case "View All Employees By Role":
-            viewRole();
+          case "View All Employee Roles":
+            viewAllRoles();
           break;
 
           case "Add Employee":
@@ -111,7 +111,9 @@ connection.connect((err) => {
 
   //view all employees by department
   function viewByDepartment() {
+
     let query = "SELECT d.id, d.name FROM employees e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id GROUP BY d.id, d.name";
+
     connection.query(query, function(err, res) {
       if (err) throw err
       // console.table(res)
@@ -152,12 +154,78 @@ connection.connect((err) => {
           if (err) throw err;
   
           console.table("response ", res);
-          console.log(res.affectedRows + "Employees are viewed!\n");
+          // console.log(res.affectedRows + "Employees are viewed!\n");
   
           start();
         });
       });
   }
+ 
+   //view all roles
+   function viewAllRoles() {
+     let query = "SELECT employees.first_name, employees.last_name, role.title AS Role FROM employees JOIN role ON employees.role_id = role.id"
+    connection.query(query, function(err, res) {
+    if (err) throw err
+    console.table(res)
+    start();
+    });
+  }
+
+
+
+
+
+
+  //  function viewByRole() {
+  //   let query = "SELECT r.title, r.salary, r.department_id FROM employees e LEFT JOIN role r ON e.role_id = d.id LEFT JOIN role d ON d.id = r.department_id GROUP BY r.id, r.name";
+  //   connection.query(query, function(err, res) {
+  //     if (err) throw err
+  //     // console.table(res)
+
+  //   });
+
+  //   connection.query(query, function (err, res) {
+  //     if (err) throw err;
+  
+  //     let roleChoice = res.map(data => ({
+  //       value: data.id, name: data.name
+  //     }));
+  
+  //     console.table(res);
+  //     // console.log("Roles!\n");
+  
+  //     rolePrompt(roleChoice);
+  //   });
+  // }
+
+  // function rolePrompt(roleChoices) {
+
+  //   inquirer
+  //     .prompt([
+  //       {
+  //         type: "list",
+  //         name: "role",
+  //         message: "Which role would you like to choose?",
+  //         choices: roleChoices
+  //       }
+  //     ])
+  //     .then(function (answer) {
+  //       console.log("answer ", answer.role);
+  
+  //       let query = "SELECT e.id, e.first_name, e.last_name, r.title, d.name AS role FROM employees e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id WHERE d.id = ?"
+        
+  //       connection.query(query, answer.role, function (err, res) {
+  //         if (err) throw err;
+  
+  //         console.table("response ", res);
+  //         console.log(res.affectedRows + "Employees are viewed!\n");
+  
+  //         start();
+  //       });
+  //     });
+  // }
+
+
   
 
   
