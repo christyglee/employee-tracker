@@ -114,8 +114,8 @@ connection.connect((err) => {
     let query = "SELECT d.id, d.name FROM employees e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id GROUP BY d.id, d.name";
     connection.query(query, function(err, res) {
       if (err) throw err
-      console.table(res)
-      start();
+      // console.table(res)
+      // start();
     });
 
     connection.query(query, function (err, res) {
@@ -128,12 +128,8 @@ connection.connect((err) => {
       console.table(res);
       // console.log("Departments!\n");
   
-      promptDepartment(departmentChoice);
+      departmentPrompt(departmentChoice);
     });
-
   }
-    
-  
 
   
-
