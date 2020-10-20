@@ -75,7 +75,7 @@ connection.connect((err) => {
           break;
 
           case "Quit":
-            quit();
+            connection.end();
           break;
 
 
