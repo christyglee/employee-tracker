@@ -148,7 +148,7 @@ connection.connect((err) => {
       .then(function (answer) {
         console.log("answer ", answer.department);
   
-        var query = "SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department FROM employees e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id WHERE d.id = ?"
+        let query = "SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department FROM employees e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id WHERE d.id = ?"
         
         connection.query(query, answer.department, function (err, res) {
           if (err) throw err;
@@ -171,6 +171,67 @@ connection.connect((err) => {
     });
   }
 
+  function addEmployee() {
+    let query = "SELECT role.id, role.title, role.salary FROM role"
+
+  connection.query(query, function (err, res) {
+    if (err) throw err;
+
+    let roleChoices = res.map(({ id, title, salary }) => ({
+      value: id, title: `${title}`, salary: `${salary}`
+    }));
+
+    console.table(res);
+    console.log("RoleToInsert!");
+
+    addEmployeePrompt(roleChoices);
+  });
+  }
+
+  function addEmployeePrompt(roleChoices) {
+
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "first_name",
+          message: "What is the employee's first name?"
+        },
+        {
+          type: "input",
+          name: "last_name",
+          message: "What is the employee's last name?"
+        },
+        {
+          type: "list",
+          name: "roleId",
+          message: "What is the employee's role?",
+          choices: roleChoices
+        }
+      ])
+      .then(function (answer) {
+      console.log(answer);
+
+      let query = "INSERT INTO employees SET ?"
+      // insert a new item into the db
+      connection.query(query,
+        {
+          first_name: answer.first_name,
+          last_name: answer.last_name,
+          role_id: answer.roleId,
+          manager_id: answer.managerId,
+        },
+        function (err, res) {
+          if (err) throw err;
+
+          console.table(res);
+          console.log("Successfully added new employee!\n");
+
+          start();
+        });
+      // console.log(query.sql);
+    });
+}
 
 
 
