@@ -244,11 +244,53 @@ connection.connect((err) => {
     }));
 
     console.table(res);
-    console.log("Role array!");
+    // console.log("Role array!");
 
-    // addRolePrompt(departmentChoices);
+    addRolePrompt(departmentChoices);
   });
     
+  }
+
+  function addRolePrompt(departmentChoices) {
+
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "roleTitle",
+          message: "What is the title of the role?"
+        },
+        {
+          type: "input",
+          name: "roleSalary",
+          message: "Enter the salary for the role."
+        },
+        {
+          type: "list",
+          name: "departmentId",
+          message: "Enter the department of the role.",
+          choices: departmentChoices
+        }
+      ])
+      .then(function (answer) {
+  
+        let query = "INSERT INTO role SET ?"
+  
+        connection.query(query, {
+          title: answer.title,
+          salary: answer.salary,
+          department_id: answer.departmentId
+        },
+          function (err, res) {
+            if (err) throw err;
+  
+            console.table(res);
+            console.log("Successfully added new role!\n");
+  
+            start();
+          });
+  
+      });
   }
 
 
