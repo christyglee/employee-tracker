@@ -182,7 +182,7 @@ connection.connect((err) => {
     }));
 
     console.table(res);
-    console.log("RoleToInsert!");
+    console.log("Insert!");
 
     addEmployeePrompt(roleChoices);
   });
@@ -229,10 +229,27 @@ connection.connect((err) => {
 
           start();
         });
-      // console.log(query.sql);
     });
 }
 
+  function addRole() {
+
+    var query = "SELECT department.id, department.name, role.salary FROM employees JOIN role ON employees.role_id = role.id JOIN department ON department.id = role.department_id GROUP BY department.id, department.name";
+
+    connection.query(query, function (err, res) {
+      if (err) throw err;
+      // (callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any)
+    let departmentChoices = res.map(({ id, name }) => ({
+      value: id, name: `${id} ${name}`
+    }));
+
+    console.table(res);
+    console.log("Role array!");
+
+    // addRolePrompt(departmentChoices);
+  });
+    
+  }
 
 
 
