@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "password",
-  database: "employee_trackerDB"
+  database: "employee_tracker_DB"
 });
 
 // Connect to the mysql server and sql database
@@ -29,7 +29,7 @@ connection.connect(function(err) {
     inquirer
       .prompt({
         name: "action",
-        type: "rawlist",
+        type: "list",
         message: "What would you like to do?",
         choices: [
           "View All Employees",
@@ -40,6 +40,37 @@ connection.connect(function(err) {
           "Update Employee Role",
           "Update Employee Manager"
         ]
+      })
+      .then(function(answer) {
+        switch (answer.action) {
+          case "View All Employees":
+            viewAllEmployees();
+          break;
+
+          case "View All Employees By Department":
+            viewByDepartment();
+          break;
+
+          case "View All Employees By Manager":
+            viewByManager();
+          break;
+
+          case "Add Employee":
+            addEmployee();
+          break;
+
+          case "Remove Employee":
+            removeEmployee();
+          break;
+
+          case "Update Employee Role":
+            updateEmployeeRole();
+          break;
+
+          case "Update Employee Manager":
+            updateManager();
+          break;
+        }
       })
 
     }
