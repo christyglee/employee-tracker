@@ -19,12 +19,13 @@ var connection = mysql.createConnection({
 });
 
 // Connect to the mysql server and sql database
-connection.connect(function(err) {
+connection.connect((err) => {
     if (err) throw err;
     // run the start function after the connection is made to prompt the user
     start();
   });
 
+  //starter prompt
   function start() {
     inquirer
       .prompt({
@@ -38,10 +39,12 @@ connection.connect(function(err) {
           "Add Employee",
           "Remove Employee",
           "Update Employee Role",
-          "Update Employee Manager"
+          "Update Employee Manager",
+          "Quit"
         ]
       })
-      .then(function(answer) {
+      //switch cases
+      .then((answer) => {
         switch (answer.action) {
           case "View All Employees":
             viewAllEmployees();
@@ -70,7 +73,24 @@ connection.connect(function(err) {
           case "Update Employee Manager":
             updateManager();
           break;
+
+          case "Quit":
+            quit();
+          break;
         }
       })
-
     }
+
+    //view all employees function
+    function viewAllEmployees(){
+
+      let query = "SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager FROM employees e LEFT JOIN employees m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id ORDER BY ID ASC";
+      connection.query(query, function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+      });
+    }
+
+  
+
