@@ -211,6 +211,7 @@ connection.connect((err) => {
       ])
       .then(function (answer) {
       console.log(answer);
+      // addRolePrompt();
 
       let query = "INSERT INTO employees SET ?"
       // insert a new item into the db
@@ -233,7 +234,7 @@ connection.connect((err) => {
 
   function addRole() {
 
-    let query = "SELECT department.id, department.name, role.salary FROM employees JOIN role ON employees.role_id = role.id JOIN department ON department.id = role.department_id GROUP BY department.id, department.name";
+    let query = "SELECT d.id, d.name, r.salary AS budget FROM employees e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id GROUP BY d.id, d.name";
 
     connection.query(query, function (err, res) {
       if (err) throw err;
